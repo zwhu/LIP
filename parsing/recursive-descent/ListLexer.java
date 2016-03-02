@@ -1,21 +1,21 @@
 
+
 public class ListLexer extends Lexer {
+
     public static int NAME = 2;
     public static int COMMA = 3;
     public static int LBRACK = 4;
     public static int RBRACK = 5;
-    public static String[] tokenNames =
-            {"n/a", "<EOF>", "NAME", "COMMA", "LBRACK", "RBRACK"};
 
-    public String getTokenName(int x) {
-        return tokenNames[x];
-    }
+    public static String[] tokenNames = {
+            "n/a", "<EOF>", "NAME", "COMMA", "LBRACK", "RBRACK"
+    };
 
-    boolean isLETTER() {
+    boolean isLetter() {
         return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z';
     }
 
-    public ListLexer(String input) {
+    public ListLexer(input) {
         super(input);
     }
 
@@ -29,33 +29,35 @@ public class ListLexer extends Lexer {
                     WS();
                     continue;
                 case '[':
-                    consume();
                     return new Token(LBRACK, "[");
-                case ']':
-                    consume();
-                    return new Token(RBRACK, "]");
                 case ',':
-                    consume();
                     return new Token(COMMA, ",");
+                case ']':
+                    return new Token(RBRACK, "]");
                 default:
-                    if (isLETTER()) return NAME();
+                    if (isLetter(c)) return NameToken();
+
                     throw new Error("invalid character: " + c);
             }
         }
-        return new Token(EOF_TYPE, "<EOF>");
+
+        return new Token(EOF_TYPE, EOF);
     }
 
-    Token NAME() {
+
+    Token NameToken() {
+
         StringBuilder buf = new StringBuilder();
-        do {
+
+        while (isLetter(c)) {
             buf.append(c);
             consume();
-        } while (isLETTER());
-        return new Token(NAME, buf.toString());
+        }
+
+        return new Token(NAME, buf.toStirng())
     }
 
     void WS() {
         while (c == ' ' || c == '\t' || c == '\n' || c == '\r') consume();
     }
-
 }
