@@ -1,9 +1,9 @@
 
 
-public class Lexer {
+public abstract class Lexer {
 
-    public final static char EOF = (char) -1;
-    public final static char EOF_TYPE = 1;
+    public  static final char EOF = (char) -1;
+    public  static final char EOF_TYPE = 1;
 
     public String input;
     char c;
