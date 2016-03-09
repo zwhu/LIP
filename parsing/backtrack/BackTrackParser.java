@@ -7,42 +7,72 @@ public class BackTrackParser extends Parser {
     }
 
 
-    public void stat() {
+    public void stat() throws RecognitionException {
         if (speclate_stat_alt1()) {
             list();
             match(Lexer.EOF_TYPE);
         } else if (speclate_stat_alt2()) {
             assign();
             match(Lexer.EOF_TYPE);
-        } else throw new NoViabelAltExpection("expecting stat found:" + LT(1));
+        } else throw new NoViableAltException("expecting stat found:" + LT(1));
 
 
     }
 
-    void assign() {
+    public boolean speclate_stat_alt1() {
+        boolean success = true;
+        mark();
+        try {
+            list();
+            match(Lexer.EOF_TYPE);
+        } catch (RecognitionException e) {
+            success = false;
+        }
+        relase();
+        return success;
+    }
+
+    public boolean speclate_stat_alt2() {
+        boolean success = true;
+        mark();
+        try {
+            assign();
+            match(Lexer.EOF_TYPE);
+        } catch (RecognitionException e) {
+            success = false;
+        }
+        relase();
+        return success;
+    }
+
+    public void assign() throws RecognitionException {
         list();
         match(BackTrackLexer.EQUALS);
         list();
     }
 
-    void list() {
-        match(ListLexer.LBRACK);
+    public void list() throws RecognitionException {
+        match(BackTrackLexer.LBRACK);
         elements();
-        match(ListLexer.RBRACK);
+        match(BackTrackLexer.RBRACK);
     }
 
-    void elements() {
+    void elements() throws RecognitionException {
         element();
-        while (lookahead.type == ListLexer.COMMA) {
-            match(ListLexer.COMMA);
+        while (LA(1) == BackTrackLexer.COMMA) {
+            match(BackTrackLexer.COMMA);
             element();
         }
     }
 
-    void element() {
-        if (lookahead.type == ListLexer.NAME) match(ListLexer.NAME);
-        else if (lookahead.type == ListLexer.LBRACK) list();
-        else throw new Error("expecting name or list; found" + lookahead);
+    void element() throws RecognitionException {
+        if (LA(1) == BackTrackLexer.NAME && LA(2) == BackTrackLexer.EQUALS) {
+            match(BackTrackLexer.NAME);
+            match(BackTrackLexer.EQUALS);
+            match(BackTrackLexer.NAME);
+        } else if (LA(1) == BackTrackLexer.NAME) match(BackTrackLexer.NAME);
+        else if (LA(1) == BackTrackLexer.LBRACK) list();
+        else throw new NoViableAltException("expecting name or list; found" + LT(1));
     }
 
 

@@ -11,7 +11,7 @@ public class Token {
     }
 
     public String toString() {
-        String tname = ListLexer.tokenNames[type];
+        String tname = BackTrackLexer.tokenNames[type];
         return "<'" + text + "'," + tname + ">";
     }
 }
